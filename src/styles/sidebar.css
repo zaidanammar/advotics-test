@@ -1,0 +1,9 @@
+.pro-sidebar-inner {
+    background-color: #ffff !important;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2), 0 4px 15px 0 rgba(0, 0, 0, 0.19);
+}
+
+.pro-icon-wrapper {
+    background-color: white !important;
+    border-radius: 4px !important;
+}
