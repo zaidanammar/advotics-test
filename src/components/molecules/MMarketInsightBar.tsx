@@ -4,7 +4,7 @@ import { help } from "../../assets/images";
 
 const MMarketInsightBar = () => {
   return (
-    <div className="h-12 px-4 flex justify-between items-center bg-primary rounded-sm">
+    <div className="h-12 px-4 flex justify-between items-center bg-primary rounded-sm shadow-sm">
       <div className="flex items-center">
         <h1 className="uppercase text-white font-semibold md:text-base text-sm">Market Insights</h1>
       </div>
