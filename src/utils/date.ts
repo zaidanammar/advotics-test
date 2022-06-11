@@ -66,17 +66,17 @@ export const defaultStaticRanges = createStaticRanges([
   {
     label: "Last 7 days",
     range: () => ({
-      startDate: defineds.startOfYesterday,
-      endDate: defineds.last7day,
-      label: "This Week",
+      startDate: defineds.last7day,
+      endDate: defineds.startOfYesterday,
+      label: "Last 7 days",
     }),
   },
   {
     label: "Last 30 days",
     range: () => ({
-      startDate: defineds.startOfYesterday,
-      endDate: defineds.last30day,
-      label: "Last Week",
+      startDate: defineds.last30day,
+      endDate: defineds.startOfYesterday,
+      label: "Last 30 days",
     }),
   },
   {

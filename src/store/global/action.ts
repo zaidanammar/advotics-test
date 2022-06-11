@@ -1,6 +1,10 @@
+import { IDate, IProduct } from "./state";
+
 export enum ActionType {
   SetOpenSidebar,
   SetOpenDatePicker,
+  SetProducts,
+  SetDate,
 }
 
 export interface SetOpenSidebar {
@@ -13,4 +17,18 @@ export interface SetOpenDatePicker {
   payload: boolean;
 }
 
-export type GlobalAction = SetOpenSidebar | SetOpenDatePicker;
+export interface SetProducts {
+  type: ActionType.SetProducts;
+  payload: IProduct[];
+}
+
+export interface SetDate {
+  type: ActionType.SetDate;
+  payload: IDate[];
+}
+
+export type GlobalAction =
+  | SetOpenSidebar
+  | SetOpenDatePicker
+  | SetProducts
+  | SetDate;

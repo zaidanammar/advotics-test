@@ -7,5 +7,9 @@ export const GlobalReducer = (state: IGlobalState, action: GlobalAction) => {
       return { ...state, openSidebar: action.payload };
     case ActionType.SetOpenDatePicker:
       return { ...state, openDatePicker: action.payload };
+    case ActionType.SetProducts:
+      return { ...state, products: action.payload };
+    case ActionType.SetDate:
+      return { ...state, date: action.payload };
   }
 };

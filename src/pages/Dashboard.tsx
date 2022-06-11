@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useContext, useEffect, useRef } from "react";
 
 import AButton from "../components/atoms/AButton";
 import ADatePicker from "../components/atoms/ADatePicker";
@@ -11,38 +12,59 @@ import OContainer from "../components/organisms/OContainer";
 import { UseOutsideClick } from "../hooks/useOutsideClick";
 import { ActionType } from "../store/global/action";
 import GlobalContext from "../store/global/context";
-import { checkLabelColor, defineds } from "../utils/date";
+import { checkLabelColor } from "../utils/date";
+import dummyProducts from "../data/products.json";
+import { IDate, IProduct } from "../store/global/state";
 
 const Dashboard = () => {
   const { GlobalDispatch, GlobalState } = useContext(GlobalContext);
-  const { openDatePicker } = GlobalState;
+  const { openDatePicker, products, date } = GlobalState;
 
   const datePickerRef = useRef(null);
-  const [date, setDate] = useState([
-    {
-      startDate: defineds.startOfYesterday,
-      endDate: defineds.last7day,
-      key: "selection",
-    },
-  ]);
+  UseOutsideClick(datePickerRef, () => handleOpenDatePicker(false));
 
-  const handleOpenDatePicker = (open: boolean, apply?: boolean) => {
+  const handleChangeDate = (date: IDate[]) => {
+    GlobalDispatch({
+      type: ActionType.SetDate,
+      payload: [
+        {
+          startDate: date[0].startDate,
+          endDate: date[0].endDate,
+          key: "selection",
+        },
+      ],
+    });
+  };
+
+  const handleSetProducts = (products: IProduct[]) => {
+    GlobalDispatch({
+      type: ActionType.SetProducts,
+      payload: products,
+    });
+  };
+
+  const handleOpenDatePicker = (open: boolean, applyFilter?: boolean) => {
+    const prevDate = [...date];
     GlobalDispatch({
       type: ActionType.SetOpenDatePicker,
       payload: open,
     });
-    if (!open && !apply) {
-      setDate([
-        {
-          startDate: defineds.startOfYesterday,
-          endDate: defineds.last7day,
-          key: "selection",
-        },
-      ]);
+    if (!open && !applyFilter) {
+      handleChangeDate(prevDate);
     }
   };
 
-  UseOutsideClick(datePickerRef, () => handleOpenDatePicker(false));
+  const applyFilter = () => {
+    const filteredProducts = [...dummyProducts].filter((product) => {
+      let productDate = new Date(product.created_at);
+      return (
+        productDate >= new Date(date[0].startDate) &&
+        productDate <= new Date(date[0].endDate)
+      );
+    });
+    handleSetProducts(filteredProducts);
+    handleOpenDatePicker(false, true);
+  };
 
   useEffect(() => {
     if (openDatePicker) {
@@ -50,41 +72,52 @@ const Dashboard = () => {
     }
   }, [date, openDatePicker]);
 
+  useEffect(() => {
+    const filteredProducts = [...dummyProducts].filter((product) => {
+      let productDate = new Date(product.created_at);
+      return (
+        productDate >= new Date(date[0].startDate) &&
+        productDate <= new Date(date[0].endDate)
+      );
+    });
+    handleSetProducts(filteredProducts);
+  }, []);
+
   return (
     <main>
-      <section className="flex justify-between items-center">
+      <section className="flex gap-3 justify-between items-center">
         <div>
           <h1 className="font-sans font-bold text-textSecondary md:text-3xl text-xl">
             Dashboard
           </h1>
         </div>
 
-        <div ref={datePickerRef} className="w-fit justify-end flex">
+        <div ref={datePickerRef} className="flex justify-end">
           <MDatePreview
             date={date}
             handleOpenDatePicker={handleOpenDatePicker}
             openDatePicker={openDatePicker}
           />
 
-          <section className="relative top-11">
-            {openDatePicker && (
-              <div className="absolute my-3 bg-slate-600 flex justify-end w-full">
+          {openDatePicker && (
+            <section className="relative top-11">
+              <div className="absolute my-3 flex justify-end w-full">
                 <aside>
                   <ADatePicker
                     date={date}
-                    handleChangeDate={(item) => setDate([item.selection])}
+                    handleChangeDate={(item) =>
+                      handleChangeDate([item.selection])
+                    }
                   />
                   <div className="relative">
                     <div className="w-1/4 absolute -top-14 flex justify-center items-center">
-                      <AButton
-                        onClick={() => handleOpenDatePicker(false, true)}
-                      />
+                      <AButton onClick={applyFilter} />
                     </div>
                   </div>
                 </aside>
               </div>
-            )}
-          </section>
+            </section>
+          )}
         </div>
       </section>
 
@@ -106,25 +139,37 @@ const Dashboard = () => {
           <div className="lg:mt-0 mt-4 w-full">
             <OContainer
               title="BEST SELLING SKU"
-              otherProps="lg:h-[360px] overflow-auto"
+              otherStyles="lg:h-[360px] lg:max-h-min max-h-[360px] overflow-auto"
             >
-              {new Array(5).fill(3).map((el, idx) => (
-                <div className={idx !== 4 ? "my-3" : ""} key={idx}>
-                  <MProductCard />
-                </div>
-              ))}
+              {products
+                .sort((a, b) => b.product_sold - a.product_sold)
+                .slice(0, 10)
+                .map((product, idx) => (
+                  <div
+                    className={"w-full " + (idx !== 9 && "my-3")}
+                    key={product.id}
+                  >
+                    <MProductCard product={product} />
+                  </div>
+                ))}
             </OContainer>
           </div>
           <div className="lg:mt-0 mt-4 w-full">
             <OContainer
               title="TOP COMPETITOR SKU"
-              otherProps="lg:h-[360px] overflow-auto"
+              otherStyles="lg:h-[360px] lg:max-h-min max-h-[360px] overflow-auto"
             >
-              {new Array(5).fill(3).map((el, idx) => (
-                <div className={idx !== 4 ? "my-3" : ""} key={idx}>
-                  <MProductCard />
-                </div>
-              ))}
+              {products
+                .sort((a, b) => b.product_sold - a.product_sold)
+                .slice(0, 10)
+                .map((product, idx) => (
+                  <div
+                    className={"w-full " + (idx !== 9 && "my-3")}
+                    key={product.id}
+                  >
+                    <MProductCard product={product} />
+                  </div>
+                ))}
             </OContainer>
           </div>
         </div>
