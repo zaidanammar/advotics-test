@@ -1,4 +1,5 @@
 import React from "react";
+
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { ImArrowDown } from "react-icons/im";
 import { salesTurnOver } from "../../assets/images";
@@ -9,7 +10,7 @@ const MSalesTurnoverCard = () => {
     <section className="bg-white p-5 md:w-fit w-full md:max-w-xs rounded-sm shadow-md">
       <div className="flex gap-10 justify-between items-center">
         <h1 className="font-sans text-textSecondary">Sales Turnover</h1>
-        <BiDotsVerticalRounded className="cursor-pointer" />
+        <BiDotsVerticalRounded className="cursor-pointer" size={20} />
       </div>
 
       <div className="flex md:justify-center justify-between mt-3">

@@ -19,7 +19,7 @@ const MDatePreview = ({
   return (
     <div
       onClick={() => handleOpenDatePicker(!openDatePicker)}
-      className="bg-white hover:bg-opacity-50 hover:bg-gray-50 shadow-md rounded md:h-12 h-8 w-fit cursor-pointer"
+      className="bg-white hover:bg-secondary hover:bg-opacity-10 shadow-md rounded md:h-12 h-8 w-fit cursor-pointer"
     >
       <div className="flex items-center md:px-5 px-3 h-full w-full gap-5">
         <div className="flex items-center gap-3">

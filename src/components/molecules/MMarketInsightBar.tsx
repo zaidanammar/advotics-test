@@ -1,5 +1,6 @@
 import React from "react";
 import { IoIosArrowUp } from "react-icons/io";
+
 import { help } from "../../assets/images";
 
 const MMarketInsightBar = () => {

@@ -11,9 +11,10 @@ import OContainer from "../components/organisms/OContainer";
 import { UseOutsideClick } from "../hooks/useOutsideClick";
 import { ActionType } from "../store/global/action";
 import GlobalContext from "../store/global/context";
-import dummyProducts from "../data/products.json";
 import { IDate, IProduct } from "../core/product/entities";
 import { ProductService } from "../core/product/service";
+import dummyProducts from "../data/products.json";
+import ASelect from "../components/atoms/ASelect";
 
 const Dashboard = () => {
   const { GlobalDispatch, GlobalState } = useContext(GlobalContext);
@@ -74,8 +75,8 @@ const Dashboard = () => {
           />
 
           {openDatePicker && (
-            <section className="relative top-11">
-              <div className="absolute my-3 flex justify-end w-full">
+            <section className="relative sm:top-11 top-7 sm:left-0 left-[215px]">
+              <div className="absolute my-3 flex justify-end w-full sm:pr-0 pr-5">
                 <ADatePicker
                   dateProps={date}
                   data={dummyProducts}
@@ -99,7 +100,10 @@ const Dashboard = () => {
 
       <section className="lg:flex gap-5 lg:mt-7 mt-4">
         <div className="lg:w-[45%]">
-          <OContainer title="AVERAGE PURCHASE VALUE">
+          <OContainer
+            title="AVERAGE PURCHASE VALUE"
+            filterComponent={<ASelect />}
+          >
             <MChart />
           </OContainer>
         </div>

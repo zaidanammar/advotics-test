@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+
 import MNavbar from "../molecules/MNavbar";
 import MSidebar from "../molecules/MSidebar";
 

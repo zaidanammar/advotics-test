@@ -7,6 +7,7 @@ import { checkLabelColor, defaultStaticRanges } from "../../utils/date";
 import { IDate, IProduct } from "../../core/product/entities";
 import "react-date-range/dist/theme/default.css";
 import "react-date-range/dist/styles.css";
+import { isMobile } from "react-device-detect";
 
 type Props = {
   dateProps: IDate[];
@@ -36,7 +37,7 @@ const ADatePicker = ({
   };
 
   return (
-    <aside>
+    <aside className="bg-slate-400">
       <DateRangePicker
         minDate={addMonths(new Date(), -6)}
         maxDate={new Date()}
@@ -46,7 +47,7 @@ const ADatePicker = ({
         color="#37B04C"
         rangeColors={["#37B04C"]}
         retainEndDateOnFirstSelection={false}
-        months={2}
+        months={isMobile ? 1 : 2}
         ranges={date}
         direction="horizontal"
         staticRanges={defaultStaticRanges}
