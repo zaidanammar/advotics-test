@@ -131,7 +131,7 @@ const Dashboard = () => {
                     className={"w-full " + (idx !== 9 && "my-3")}
                     key={product.id}
                   >
-                    <MProductCard product={product} />
+                    <MProductCard product={product} idx={idx} />
                   </div>
                 ))
               )}
@@ -154,7 +154,7 @@ const Dashboard = () => {
                     className={"w-full " + (idx !== 9 && "my-3")}
                     key={product.id}
                   >
-                    <MProductCard product={product} />
+                    <MProductCard product={product} idx={idx} />
                   </div>
                 ))
               )}

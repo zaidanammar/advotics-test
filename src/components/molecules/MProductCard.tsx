@@ -1,3 +1,4 @@
+import { isEqual } from "lodash";
 import React from "react";
 
 import { product as productImg } from "../../assets/images";
@@ -6,11 +7,17 @@ import { formatCurrency } from "../../utils/common";
 
 type Props = {
   product: IProduct;
+  idx: number;
 };
 
-const MProductCard = ({ product }: Props) => {
+const MProductCard = ({ product, idx }: Props) => {
   return (
-    <div className="flex items-center bg-white rounded-md shadow-sm border">
+    <div
+      className={
+        "flex items-center rounded-md shadow-sm border cursor-pointer " +
+        (isEqual(idx, 0) ? " bg-tertiary hover:bg-tertiary hover:bg-opacity-80" : "bg-white hover:bg-secondary hover:bg-opacity-10")
+      }
+    >
       <div className="lg:w-1/4 sm:w-1/5 w-1/6">
         <img src={productImg} alt="product" className="w-full" />
       </div>
