@@ -71,8 +71,9 @@ const MSidebar = () => {
           </Menu>
         </SidebarHeader>
         <SidebarContent className="block sm:pt-0 pt-20">
-          {listPath.map((item) => (
+          {listPath.map((item, idx) => (
             <AMenu
+              key={idx}
               item={item}
               handleLogout={handleLogout}
               handleCollapseSidebar={handleCollapseSidebar}
