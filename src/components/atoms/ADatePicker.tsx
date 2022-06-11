@@ -1,6 +1,7 @@
 import React from "react";
 import { DateRangePicker, Range } from "react-date-range";
-import { defaultStaticRanges } from "../../../utils/date";
+import { addMonths } from "date-fns";
+import { defaultStaticRanges } from "../../utils/date";
 import "react-date-range/dist/theme/default.css";
 import "react-date-range/dist/styles.css";
 
@@ -12,6 +13,8 @@ type Props = {
 const ADatePicker = ({ date, handleChangeDate }: Props) => {
   return (
     <DateRangePicker
+      minDate={addMonths(new Date(), -6)}
+      maxDate={new Date()}
       className="shadow-md"
       onChange={handleChangeDate}
       showMonthAndYearPickers={true}
@@ -23,6 +26,7 @@ const ADatePicker = ({ date, handleChangeDate }: Props) => {
       direction="horizontal"
       staticRanges={defaultStaticRanges}
       inputRanges={[]}
+      showDateDisplay={true}
     />
   );
 };

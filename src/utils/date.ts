@@ -17,6 +17,8 @@ import { isEqual } from "lodash";
 export const defineds = {
   startOfDay: startOfDay(new Date()),
   endOfDay: endOfDay(new Date()),
+  last7day: addDays(new Date(), -7),
+  last30day: addDays(new Date(), -30),
   startOfWeek: startOfWeek(new Date()),
   endOfWeek: endOfWeek(new Date()),
   startOfLastWeek: startOfWeek(addDays(new Date(), -7)),
@@ -64,16 +66,16 @@ export const defaultStaticRanges = createStaticRanges([
   {
     label: "Last 7 days",
     range: () => ({
-      startDate: new Date(),
-      endDate: addDays(new Date(), -7),
+      startDate: defineds.startOfYesterday,
+      endDate: defineds.last7day,
       label: "This Week",
     }),
   },
   {
     label: "Last 30 days",
     range: () => ({
-      startDate: new Date(),
-      endDate: addDays(new Date(), -30),
+      startDate: defineds.startOfYesterday,
+      endDate: defineds.last30day,
       label: "Last Week",
     }),
   },
@@ -81,7 +83,7 @@ export const defaultStaticRanges = createStaticRanges([
     label: "This Month",
     range: () => ({
       startDate: defineds.startOfMonth,
-      endDate: defineds.endOfMonth,
+      endDate: defineds.endOfDay,
       label: "This Month",
     }),
   },
@@ -95,7 +97,7 @@ export const defaultStaticRanges = createStaticRanges([
   },
 ]);
 
-export const checkLabelColor = (date: any) => {
+export const checkLabelColor = (date: { startDate: Date; endDate: Date }[]) => {
   const element = document.getElementsByClassName("rdrStaticRange");
   defaultStaticRanges.filter((el, idx) =>
     isEqual(

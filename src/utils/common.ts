@@ -20,6 +20,7 @@ export const formatCurrency = ({
 export const formatDate = (
   date: Date | string,
   format:
+    | "DD MMMM YYYY"
     | "YYYY-MM-DD"
     | "DD/MM/YYYY"
     | "YYYY"

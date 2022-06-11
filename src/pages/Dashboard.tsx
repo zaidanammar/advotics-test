@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { IoIosArrowDown } from "react-icons/io";
-import { calendar } from "../assets/images";
-import ADatePicker from "../components/atoms/icons/ADatePicker";
+
+import AButton from "../components/atoms/AButton";
+import ADatePicker from "../components/atoms/ADatePicker";
 import MChart from "../components/molecules/MChart";
+import MDatePreview from "../components/molecules/MDatePreview";
 import MMarketInsightBar from "../components/molecules/MMarketInsightBar";
 import MProductCard from "../components/molecules/MProductCard";
 import MSalesTurnoverCard from "../components/molecules/MSalesTurnoverCard";
@@ -10,7 +11,6 @@ import OContainer from "../components/organisms/OContainer";
 import { UseOutsideClick } from "../hooks/useOutsideClick";
 import { ActionType } from "../store/global/action";
 import GlobalContext from "../store/global/context";
-import { formatDate } from "../utils/common";
 import { checkLabelColor, defineds } from "../utils/date";
 
 const Dashboard = () => {
@@ -20,19 +20,29 @@ const Dashboard = () => {
   const datePickerRef = useRef(null);
   const [date, setDate] = useState([
     {
-      startDate: new Date(formatDate(defineds.startOfMonth)),
-      endDate: new Date(formatDate(defineds.endOfMonth)),
+      startDate: defineds.startOfYesterday,
+      endDate: defineds.last7day,
       key: "selection",
     },
   ]);
 
-  const handleShowFilter = () => {
+  const handleOpenDatePicker = (open: boolean, apply?: boolean) => {
     GlobalDispatch({
       type: ActionType.SetOpenDatePicker,
+      payload: open,
     });
+    if (!open && !apply) {
+      setDate([
+        {
+          startDate: defineds.startOfYesterday,
+          endDate: defineds.last7day,
+          key: "selection",
+        },
+      ]);
+    }
   };
 
-  UseOutsideClick(datePickerRef, handleShowFilter);
+  UseOutsideClick(datePickerRef, () => handleOpenDatePicker(false));
 
   useEffect(() => {
     if (openDatePicker) {
@@ -42,50 +52,40 @@ const Dashboard = () => {
 
   return (
     <main>
-      <section className="flex justify-between">
+      <section className="flex justify-between items-center">
         <div>
           <h1 className="font-sans font-bold text-textSecondary md:text-3xl text-xl">
             Dashboard
           </h1>
         </div>
 
-        <div className="bg-white shadow-md rounded h-12 w-fit">
-          <div className="flex items-center px-5 h-full w-full gap-3">
-            <div>
-              <img src={calendar} alt="calendar" />
-            </div>
-            <div className="text-textPrimary font-label md:inline-flex hidden">
-              <p>Period</p>
-            </div>
-            <div className="text-textPrimary font-label md:inline-flex hidden cursor-default">
-              <p>11 September 2018 - 14 September 2018</p>
-            </div>
-            <div>
-              <IoIosArrowDown
-                onClick={!openDatePicker ? handleShowFilter : () => {}}
-                className={
-                  "text-textPrimary cursor-pointer duration-300  " +
-                  (openDatePicker && "rotate-180")
-                }
-                size={20}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+        <div ref={datePickerRef} className="w-fit justify-end flex">
+          <MDatePreview
+            date={date}
+            handleOpenDatePicker={handleOpenDatePicker}
+            openDatePicker={openDatePicker}
+          />
 
-      <section className="relative">
-        {openDatePicker && (
-          <div
-            ref={datePickerRef}
-            className="absolute my-3 flex justify-end w-full"
-          >
-            <ADatePicker
-              date={date}
-              handleChangeDate={(item) => setDate([item.selection])}
-            />
-          </div>
-        )}
+          <section className="relative top-11">
+            {openDatePicker && (
+              <div className="absolute my-3 bg-slate-600 flex justify-end w-full">
+                <aside>
+                  <ADatePicker
+                    date={date}
+                    handleChangeDate={(item) => setDate([item.selection])}
+                  />
+                  <div className="relative">
+                    <div className="w-1/4 absolute -top-14 flex justify-center items-center">
+                      <AButton
+                        onClick={() => handleOpenDatePicker(false, true)}
+                      />
+                    </div>
+                  </div>
+                </aside>
+              </div>
+            )}
+          </section>
+        </div>
       </section>
 
       <section className="md:mt-7 mt-4">
