@@ -3,9 +3,10 @@ import { isEqual } from "lodash";
 import { IoIosArrowDown } from "react-icons/io";
 import { calendar } from "../../assets/images";
 import { formatDate } from "../../utils/common";
+import { IDate } from "../../core/product/entities";
 
 type Props = {
-  date: { startDate: Date; endDate: Date }[];
+  date: IDate[];
   handleOpenDatePicker: (openDatePicker: boolean) => void;
   openDatePicker: boolean;
 };
@@ -17,13 +18,13 @@ const MDatePreview = ({
 }: Props) => {
   return (
     <div
-      onClick={() => handleOpenDatePicker(true)}
-      className="bg-white shadow-md rounded h-12 w-fit cursor-pointer"
+      onClick={() => handleOpenDatePicker(!openDatePicker)}
+      className="bg-white hover:bg-opacity-50 hover:bg-gray-50 shadow-md rounded md:h-12 h-8 w-fit cursor-pointer"
     >
-      <div className="flex items-center px-5 h-full w-full gap-5">
+      <div className="flex items-center md:px-5 px-3 h-full w-full gap-5">
         <div className="flex items-center gap-3">
-          <div>
-            <img src={calendar} alt="calendar" />
+          <div className="md:w-5 w-4">
+            <img src={calendar} alt="calendar" className="w-full" />
           </div>
           <div className="text-textPrimary font-label md:inline-flex hidden">
             <p>Period</p>

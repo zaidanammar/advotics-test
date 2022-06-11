@@ -39,25 +39,25 @@ export const data = {
   datasets: [
     {
       label: "Net",
-      data: [33, 55, 35, 77],
+      data: [33, 55, 35, 77, 66, 86, 135, 89, 11, 91, 34, 55],
       backgroundColor: "#37B04C",
       stack: "Stack 0",
     },
     {
       label: "Gross",
-      data: [33, 56, 35, 77],
+      data: [32, 15, 45, 57, 66, 26, 115, 69, 61, 41, 74, 85],
       backgroundColor: "#289E45",
       stack: "Stack 0",
     },
     {
       label: "Average Purchase Values",
-      data: [33, 56, 35, 77],
+      data: [11, 25, 35, 47, 16, 56, 105, 69, 78, 86, 44, 85],
       backgroundColor: "#7AE28C",
       stack: "Stack 0",
     },
     {
       label: "Unit per Transaction",
-      data: [33, 56, 35, 77],
+      data: [55, 65, 75, 87, 65, 84, 155, 77, 17, 33, 38, 65],
       backgroundColor: "#707070",
       stack: "Stack 0",
     },

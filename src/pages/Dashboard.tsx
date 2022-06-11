@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useRef } from "react";
 
-import AButton from "../components/atoms/AButton";
 import ADatePicker from "../components/atoms/ADatePicker";
 import MChart from "../components/molecules/MChart";
 import MDatePreview from "../components/molecules/MDatePreview";
@@ -12,9 +11,9 @@ import OContainer from "../components/organisms/OContainer";
 import { UseOutsideClick } from "../hooks/useOutsideClick";
 import { ActionType } from "../store/global/action";
 import GlobalContext from "../store/global/context";
-import { checkLabelColor } from "../utils/date";
 import dummyProducts from "../data/products.json";
-import { IDate, IProduct } from "../store/global/state";
+import { IDate, IProduct } from "../core/product/entities";
+import { ProductService } from "../core/product/service";
 
 const Dashboard = () => {
   const { GlobalDispatch, GlobalState } = useContext(GlobalContext);
@@ -22,6 +21,14 @@ const Dashboard = () => {
 
   const datePickerRef = useRef(null);
   UseOutsideClick(datePickerRef, () => handleOpenDatePicker(false));
+
+  useEffect(() => {
+    const filteredProducts = new ProductService().getFilteredProducts(
+      dummyProducts,
+      date
+    );
+    handleSetProducts(filteredProducts);
+  }, []);
 
   const handleChangeDate = (date: IDate[]) => {
     GlobalDispatch({
@@ -43,45 +50,27 @@ const Dashboard = () => {
     });
   };
 
-  const handleOpenDatePicker = (open: boolean, applyFilter?: boolean) => {
-    const prevDate = [...date];
+  const handleOpenDatePicker = (
+    open: boolean,
+    applyFilter?: boolean
+  ) => {
     GlobalDispatch({
       type: ActionType.SetOpenDatePicker,
       payload: open,
     });
     if (!open && !applyFilter) {
-      handleChangeDate(prevDate);
+      // handleChangeDate(prevDate);
     }
   };
 
   const applyFilter = () => {
-    const filteredProducts = [...dummyProducts].filter((product) => {
-      let productDate = new Date(product.created_at);
-      return (
-        productDate >= new Date(date[0].startDate) &&
-        productDate <= new Date(date[0].endDate)
-      );
-    });
+    const filteredProducts = new ProductService().getFilteredProducts(
+      dummyProducts,
+      date
+    );
     handleSetProducts(filteredProducts);
     handleOpenDatePicker(false, true);
   };
-
-  useEffect(() => {
-    if (openDatePicker) {
-      checkLabelColor(date);
-    }
-  }, [date, openDatePicker]);
-
-  useEffect(() => {
-    const filteredProducts = [...dummyProducts].filter((product) => {
-      let productDate = new Date(product.created_at);
-      return (
-        productDate >= new Date(date[0].startDate) &&
-        productDate <= new Date(date[0].endDate)
-      );
-    });
-    handleSetProducts(filteredProducts);
-  }, []);
 
   return (
     <main>
@@ -102,19 +91,11 @@ const Dashboard = () => {
           {openDatePicker && (
             <section className="relative top-11">
               <div className="absolute my-3 flex justify-end w-full">
-                <aside>
-                  <ADatePicker
-                    date={date}
-                    handleChangeDate={(item) =>
-                      handleChangeDate([item.selection])
-                    }
-                  />
-                  <div className="relative">
-                    <div className="w-1/4 absolute -top-14 flex justify-center items-center">
-                      <AButton onClick={applyFilter} />
-                    </div>
-                  </div>
-                </aside>
+                <ADatePicker
+                  applyFilter={applyFilter}
+                  handleChangeDate={handleChangeDate}
+                  dateProps={date}
+                />
               </div>
             </section>
           )}
@@ -141,17 +122,14 @@ const Dashboard = () => {
               title="BEST SELLING SKU"
               otherStyles="lg:h-[360px] lg:max-h-min max-h-[360px] overflow-auto"
             >
-              {products
-                .sort((a, b) => b.product_sold - a.product_sold)
-                .slice(0, 10)
-                .map((product, idx) => (
-                  <div
-                    className={"w-full " + (idx !== 9 && "my-3")}
-                    key={product.id}
-                  >
-                    <MProductCard product={product} />
-                  </div>
-                ))}
+              {ProductService.getTopProducts(products).map((product, idx) => (
+                <div
+                  className={"w-full " + (idx !== 9 && "my-3")}
+                  key={product.id}
+                >
+                  <MProductCard product={product} />
+                </div>
+              ))}
             </OContainer>
           </div>
           <div className="lg:mt-0 mt-4 w-full">
@@ -159,17 +137,14 @@ const Dashboard = () => {
               title="TOP COMPETITOR SKU"
               otherStyles="lg:h-[360px] lg:max-h-min max-h-[360px] overflow-auto"
             >
-              {products
-                .sort((a, b) => b.product_sold - a.product_sold)
-                .slice(0, 10)
-                .map((product, idx) => (
-                  <div
-                    className={"w-full " + (idx !== 9 && "my-3")}
-                    key={product.id}
-                  >
-                    <MProductCard product={product} />
-                  </div>
-                ))}
+              {ProductService.getTopProducts(products).map((product, idx) => (
+                <div
+                  className={"w-full " + (idx !== 9 && "my-3")}
+                  key={product.id}
+                >
+                  <MProductCard product={product} />
+                </div>
+              ))}
             </OContainer>
           </div>
         </div>

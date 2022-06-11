@@ -2,9 +2,10 @@ import { createContext } from "react";
 import { IGlobalContext, IGlobalState } from "./state";
 import dummyProducts from "../../data/products.json";
 import { defineds } from "../../utils/date";
+import { isMobile } from "react-device-detect";
 
 export const initialGlobalState: IGlobalState = {
-  openSidebar: false,
+  openSidebar: isMobile ? false : true,
   openDatePicker: false,
   products: dummyProducts,
   date: [

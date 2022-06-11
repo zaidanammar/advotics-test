@@ -1,33 +1,55 @@
-import React from "react";
-import { DateRangePicker, Range } from "react-date-range";
+import React, { useEffect, useState } from "react";
+import { DateRangePicker } from "react-date-range";
 import { addMonths } from "date-fns";
-import { defaultStaticRanges } from "../../utils/date";
+
+import AButton from "./AButton";
+import { checkLabelColor, defaultStaticRanges } from "../../utils/date";
+import { IDate } from "../../core/product/entities";
 import "react-date-range/dist/theme/default.css";
 import "react-date-range/dist/styles.css";
 
 type Props = {
-  date: Range[];
-  handleChangeDate: (item: any) => void;
+  dateProps: IDate[];
+  applyFilter: () => void;
+  handleChangeDate: (date: IDate[]) => void;
 };
 
-const ADatePicker = ({ date, handleChangeDate }: Props) => {
+const ADatePicker = ({ applyFilter, handleChangeDate, dateProps }: Props) => {
+  const [date, setDate] = useState(dateProps);
+
+  useEffect(() => {
+    checkLabelColor(date);
+  }, [date]);
+
+  const handleApplyFilter = () => {
+    handleChangeDate(date);
+    applyFilter();
+  };
+
   return (
-    <DateRangePicker
-      minDate={addMonths(new Date(), -6)}
-      maxDate={new Date()}
-      className="shadow-md"
-      onChange={handleChangeDate}
-      showMonthAndYearPickers={true}
-      color="#37B04C"
-      rangeColors={["#37B04C"]}
-      retainEndDateOnFirstSelection={false}
-      months={2}
-      ranges={date}
-      direction="horizontal"
-      staticRanges={defaultStaticRanges}
-      inputRanges={[]}
-      showDateDisplay={true}
-    />
+    <aside>
+      <DateRangePicker
+        minDate={addMonths(new Date(), -6)}
+        maxDate={new Date()}
+        className="shadow-md"
+        onChange={(item: any) => setDate([item.selection])}
+        showMonthAndYearPickers={true}
+        color="#37B04C"
+        rangeColors={["#37B04C"]}
+        retainEndDateOnFirstSelection={false}
+        months={2}
+        ranges={date}
+        direction="horizontal"
+        staticRanges={defaultStaticRanges}
+        inputRanges={[]}
+        showDateDisplay={true}
+      />
+      <div className="relative">
+        <div className="w-1/4 absolute -top-14 flex justify-center items-center">
+          <AButton onClick={handleApplyFilter} />
+        </div>
+      </div>
+    </aside>
   );
 };
 

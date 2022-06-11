@@ -1,4 +1,4 @@
-import { IDate, IProduct } from "./state";
+import { IDate, IProduct } from "../../core/product/entities";
 
 export enum ActionType {
   SetOpenSidebar,

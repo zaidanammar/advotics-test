@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Avatar } from "@mui/material";
 import { FiLogOut } from "react-icons/fi";
 import { BsList } from "react-icons/bs";
 import { advoticsLogo } from "../../assets/images";
+import GlobalContext from "../../store/global/context";
+import { ActionType } from "../../store/global/action";
 
 const MNavbar = () => {
+  const { GlobalDispatch, GlobalState } = useContext(GlobalContext);
+  const { openSidebar } = GlobalState;
+
+  const handleOpenSidebar = () => {
+    GlobalDispatch({
+      type: ActionType.SetOpenSidebar,
+      payload: !openSidebar,
+    });
+  };
+
   return (
     <nav className="fixed h-16 z-10 flex md:px-8 px-6 w-full bg-white shadow-md">
       <div className="w-full flex items-center justify-between">
@@ -33,7 +45,7 @@ const MNavbar = () => {
           <div className="md:flex hidden">
             <FiLogOut size={20} color="#757575" className="cursor-pointer" />
           </div>
-          <div className="md:hidden flex">
+          <div onClick={handleOpenSidebar} className="md:hidden flex">
             <BsList size={25} color="#757575" className="cursor-pointer" />
           </div>
         </div>

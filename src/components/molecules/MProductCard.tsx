@@ -1,6 +1,6 @@
 import React from "react";
 import { product as productImg } from "../../assets/images";
-import { IProduct } from "../../store/global/state";
+import { IProduct } from "../../core/product/entities";
 import { formatCurrency } from "../../utils/common";
 
 type Props = {

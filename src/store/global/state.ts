@@ -1,19 +1,6 @@
 import React from "react";
+import { IDate, IProduct } from "../../core/product/entities";
 import { GlobalAction } from "./action";
-
-export interface IProduct {
-  id: number;
-  product_name: string;
-  price: number;
-  created_at: string;
-  product_sold: number;
-}
-
-export interface IDate {
-  startDate: Date;
-  endDate: Date;
-  key: string;
-}
 
 export interface IGlobalState {
   openSidebar: boolean;
