@@ -9,6 +9,7 @@ import {
   BarElement,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { isMobile } from "react-device-detect";
 
 ChartJS.register(
   CategoryScale,
@@ -69,7 +70,7 @@ export const options = {
     intersect: false,
   },
   responsive: true,
-  aspectRatio: 2,
+  aspectRatio: isMobile ? 1 : 2,
   plugins: {
     legend: {
       position: "bottom" as const,

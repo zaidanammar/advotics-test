@@ -4,17 +4,25 @@ import { addMonths } from "date-fns";
 
 import AButton from "./AButton";
 import { checkLabelColor, defaultStaticRanges } from "../../utils/date";
-import { IDate } from "../../core/product/entities";
+import { IDate, IProduct } from "../../core/product/entities";
 import "react-date-range/dist/theme/default.css";
 import "react-date-range/dist/styles.css";
 
 type Props = {
   dateProps: IDate[];
-  applyFilter: () => void;
+  handleSetData: (product: IProduct[], date: IDate[]) => void;
+  data: IProduct[];
   handleChangeDate: (date: IDate[]) => void;
+  handleOpenDatePicker: (open: boolean) => void;
 };
 
-const ADatePicker = ({ applyFilter, handleChangeDate, dateProps }: Props) => {
+const ADatePicker = ({
+  dateProps,
+  handleChangeDate,
+  data,
+  handleSetData,
+  handleOpenDatePicker,
+}: Props) => {
   const [date, setDate] = useState(dateProps);
 
   useEffect(() => {
@@ -23,7 +31,8 @@ const ADatePicker = ({ applyFilter, handleChangeDate, dateProps }: Props) => {
 
   const handleApplyFilter = () => {
     handleChangeDate(date);
-    applyFilter();
+    handleSetData(data, date);
+    handleOpenDatePicker(false);
   };
 
   return (

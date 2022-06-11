@@ -38,16 +38,16 @@ const MSidebar = () => {
         collapsed={isMobile ? false : openSidebar}
         width={isMobile ? 700 : 250}
       >
-        <SidebarHeader>
-          <div className="px-7 pb-3 pt-20 sm:flex hiden gap-3">
+        <SidebarHeader className="sm:flex hidden gap-3 px-7 pt-[68px] pb-1">
+          <Menu iconShape="square">
             <BsList
               onClick={handleCollapseSidebar}
               className="cursor-pointer"
               size={25}
             />
-          </div>
+          </Menu>
         </SidebarHeader>
-        <SidebarContent>
+        <SidebarContent className="block sm:pt-0 pt-20">
           <Menu iconShape="square">
             <MenuItem
               className="bg-secondary -mt-3 py-1 pl-0.5"

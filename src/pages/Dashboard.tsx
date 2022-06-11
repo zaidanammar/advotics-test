@@ -23,11 +23,7 @@ const Dashboard = () => {
   UseOutsideClick(datePickerRef, () => handleOpenDatePicker(false));
 
   useEffect(() => {
-    const filteredProducts = new ProductService().getFilteredProducts(
-      dummyProducts,
-      date
-    );
-    handleSetProducts(filteredProducts);
+    handleSetProducts(dummyProducts, date);
   }, []);
 
   const handleChangeDate = (date: IDate[]) => {
@@ -43,33 +39,22 @@ const Dashboard = () => {
     });
   };
 
-  const handleSetProducts = (products: IProduct[]) => {
+  const handleSetProducts = (products: IProduct[], date: IDate[]) => {
+    const filteredProducts = new ProductService().getFilteredProducts(
+      products,
+      date
+    );
     GlobalDispatch({
       type: ActionType.SetProducts,
-      payload: products,
+      payload: filteredProducts,
     });
   };
 
-  const handleOpenDatePicker = (
-    open: boolean,
-    applyFilter?: boolean
-  ) => {
+  const handleOpenDatePicker = (open: boolean) => {
     GlobalDispatch({
       type: ActionType.SetOpenDatePicker,
       payload: open,
     });
-    if (!open && !applyFilter) {
-      // handleChangeDate(prevDate);
-    }
-  };
-
-  const applyFilter = () => {
-    const filteredProducts = new ProductService().getFilteredProducts(
-      dummyProducts,
-      date
-    );
-    handleSetProducts(filteredProducts);
-    handleOpenDatePicker(false, true);
   };
 
   return (
@@ -92,9 +77,11 @@ const Dashboard = () => {
             <section className="relative top-11">
               <div className="absolute my-3 flex justify-end w-full">
                 <ADatePicker
-                  applyFilter={applyFilter}
-                  handleChangeDate={handleChangeDate}
                   dateProps={date}
+                  data={dummyProducts}
+                  handleSetData={handleSetProducts}
+                  handleChangeDate={handleChangeDate}
+                  handleOpenDatePicker={handleOpenDatePicker}
                 />
               </div>
             </section>

@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import { Avatar } from "@mui/material";
 import { FiLogOut } from "react-icons/fi";
 import { BsList } from "react-icons/bs";
+import { MdOutlineCancel } from "react-icons/md";
+
 import { advoticsLogo } from "../../assets/images";
 import GlobalContext from "../../store/global/context";
 import { ActionType } from "../../store/global/action";
@@ -46,7 +48,15 @@ const MNavbar = () => {
             <FiLogOut size={20} color="#757575" className="cursor-pointer" />
           </div>
           <div onClick={handleOpenSidebar} className="md:hidden flex">
-            <BsList size={25} color="#757575" className="cursor-pointer" />
+            {openSidebar ? (
+              <MdOutlineCancel
+                size={27}
+                color="#757575"
+                className="cursor-pointer"
+              />
+            ) : (
+              <BsList size={25} color="#757575" className="cursor-pointer" />
+            )}
           </div>
         </div>
       </div>
