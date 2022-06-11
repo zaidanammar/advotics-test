@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useMemo, useRef } from "react";
+import { isEmpty } from "lodash";
 
+import ASelect from "../components/atoms/ASelect";
 import ADatePicker from "../components/atoms/ADatePicker";
 import MChart from "../components/molecules/MChart";
 import MDatePreview from "../components/molecules/MDatePreview";
@@ -14,7 +16,6 @@ import GlobalContext from "../store/global/context";
 import { IDate, IProduct } from "../core/product/entities";
 import { ProductService } from "../core/product/service";
 import dummyProducts from "../data/products.json";
-import ASelect from "../components/atoms/ASelect";
 
 const Dashboard = () => {
   const { GlobalDispatch, GlobalState } = useContext(GlobalContext);
@@ -22,6 +23,11 @@ const Dashboard = () => {
 
   const datePickerRef = useRef(null);
   UseOutsideClick(datePickerRef, () => handleOpenDatePicker(false));
+
+  const topProducts = useMemo(
+    () => ProductService.getTopProducts(products),
+    [products]
+  );
 
   useEffect(() => {
     handleSetProducts(dummyProducts, date);
@@ -113,14 +119,22 @@ const Dashboard = () => {
               title="BEST SELLING SKU"
               otherStyles="lg:h-[360px] lg:max-h-min max-h-[360px] overflow-auto"
             >
-              {ProductService.getTopProducts(products).map((product, idx) => (
-                <div
-                  className={"w-full " + (idx !== 9 && "my-3")}
-                  key={product.id}
-                >
-                  <MProductCard product={product} />
+              {isEmpty(topProducts) ? (
+                <div className="flex justify-center items-center h-4/5">
+                  <h1 className="text-textPrimary font-sans font-semibold underline underline-offset-2">
+                    No records available.
+                  </h1>
                 </div>
-              ))}
+              ) : (
+                topProducts.map((product, idx) => (
+                  <div
+                    className={"w-full " + (idx !== 9 && "my-3")}
+                    key={product.id}
+                  >
+                    <MProductCard product={product} />
+                  </div>
+                ))
+              )}
             </OContainer>
           </div>
           <div className="lg:mt-0 mt-4 w-full">
@@ -128,14 +142,22 @@ const Dashboard = () => {
               title="TOP COMPETITOR SKU"
               otherStyles="lg:h-[360px] lg:max-h-min max-h-[360px] overflow-auto"
             >
-              {ProductService.getTopProducts(products).map((product, idx) => (
-                <div
-                  className={"w-full " + (idx !== 9 && "my-3")}
-                  key={product.id}
-                >
-                  <MProductCard product={product} />
+              {isEmpty(topProducts) ? (
+                <div className="flex justify-center items-center h-4/5">
+                  <h1 className="text-textPrimary font-sans font-semibold underline underline-offset-2">
+                    No records available.
+                  </h1>
                 </div>
-              ))}
+              ) : (
+                topProducts.map((product, idx) => (
+                  <div
+                    className={"w-full " + (idx !== 9 && "my-3")}
+                    key={product.id}
+                  >
+                    <MProductCard product={product} />
+                  </div>
+                ))
+              )}
             </OContainer>
           </div>
         </div>
